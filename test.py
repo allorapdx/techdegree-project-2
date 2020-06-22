@@ -6,20 +6,19 @@ Version 1.0
 --------------------------------
 """
 
-#Import player data, copy module, random module
+#Import player data, copy module, random module, itertools module
 import constants
 import copy
-import random
 import itertools
+import random
 
 #Copy of tables and create new ones
 teams_copy = copy.deepcopy(constants.TEAMS)
 players_copy = copy.deepcopy(constants.PLAYERS)
 Teams = dict.fromkeys(teams_copy, [])
 
-teams_iter = itertools.cycle(teams_copy)
-
 NUM_PLAYERS_TEAM = len(constants.PLAYERS) / len(constants.TEAMS)
+teams_iter = itertools.cycle(teams_copy)
 
 
 #'Height' saved as an integer
@@ -41,7 +40,6 @@ def clean_guardians():
 
 
 #Balance the players across the three teams with equal experienced
-#TODO: Make random and append goes into teams dict
 def random_player_balance():
     exp = 0
     for player in players_copy:
@@ -50,28 +48,14 @@ def random_player_balance():
     num_exp_players_team = exp / len(constants.TEAMS)
     num_non_exp_players_team = NUM_PLAYERS_TEAM - num_exp_players_team
     
-    #count = 0
-    #count2 = 0
-    #count3 = 0
-    #count4 = 0
+    print(NUM_PLAYERS_TEAM)
+    print(num_exp_players_team)
+    
     random.shuffle(players_copy)
-    for player in players_copy:
-        Teams[next(teams_iter)].append(player)
-        #if player['experience'] == bool('TRUE') and count < num_exp_players_team:
-            #Teams[next(teams_iter)].append(player)
-            #count += 1
-        #elif player['experience'] == bool('TRUE') and count2 < num_exp_players_team:
-            #Teams[next(teams_iter)].append(player)
-            #count2 += 1
-        #elif player['experience'] == bool('') and count3 < num_non_exp_players_team:
-            #Teams[next(teams_iter)].append(player)
-            #count3 += 1
-        #elif player['experience'] == bool('') and count4 < num_non_exp_players_team:
-            #Teams[next(teams_iter)].append(player)
-            #Teams['Bandits'].append(player)
-            #count4 += 1
-        #else:
-            #Teams[next(teams_iter)].append(player)
+    count = 0
+    while count < NUM_PLAYERS_TEAM:
+        Teams[next(teams_iter)].append(players_copy[count])
+        count += 1
 
 
 #Display menu to user and continuously loop until user selects 'Quit'
@@ -100,15 +84,15 @@ def stats_menu():
         if second_number_selection == '1':
             next = True
             print('\n Team: Panthers Stats\n', '-'*20)
-            stats(Panthers)
+            stats(Teams['Panthers'])
         elif second_number_selection == '2':
             next = True
             print('\n Team: Bandits Stats\n', '-'*20)
-            stats(Bandits)
+            stats(Teams['Bandits'])
         elif second_number_selection == '3':
             next = True
             print('\n Team: Warriors Stats\n', '-'*20)
-            stats(Warriors)
+            stats(Teams['Warriors'])
         elif second_number_selection == '4':
             next = True
             print('\nGoodbye!\n')
@@ -146,8 +130,4 @@ if __name__ == "__main__":
     clean_experience()
     clean_guardians()
     random_player_balance()
-    #start_menu()
-    print(len(Teams['Panthers']))
-    print(len(Teams['Bandits']))
-    print(len(Teams['Warriors']))
-    print(Teams)
+    start_menu()
